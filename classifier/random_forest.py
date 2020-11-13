@@ -17,7 +17,7 @@ class RandomForest:
         return self
 
     def predict(self, X):
-        self.predictions = self.classifer.predict(X)
+        self.predictions = self.classifier.predict(X)
         return self.predictions
 
     def get_parameters(self):
