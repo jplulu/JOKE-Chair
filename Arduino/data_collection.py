@@ -3,12 +3,12 @@ import numpy as np
 import pandas as pd
 import time
 
-NUM_SENSORS = 4
+NUM_SENSORS = 8
 
 
 def main():
-    ser = serial.Serial('COM4', 9600)
-    output = [['Reading 1', 'Reading 2', 'Reading 3', 'Reading 4']]
+    ser = serial.Serial('COM29', 9600)
+    output = [['Reading 1', 'Reading 2', 'Reading 3', 'Reading 4', 'Reading 5', 'Reading 6', 'Reading 7', 'Reading 8']]
     collect(ser, output)
 
 
@@ -50,12 +50,12 @@ def collect(ser, output):
     ser.close()
 
     df = pd.DataFrame(output[1:], columns=output[0])
-    df['Label'] = 'lean right'
+    df['Label'] = 'left leg cross'
     df['Baseline'] = ",".join(baseline.astype(str))
     # for i in range(1, 5):
         # df = df[df['Reading '+ str(i)] > baseline[i-1] + 50]
     df = df[300:]
-    df.to_csv('lean_right_kevin.csv', index=False)
+    df.to_csv('../data/left_leg_cross_kevin.csv', index=False)
 
     return df
 
