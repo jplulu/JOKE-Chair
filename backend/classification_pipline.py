@@ -28,4 +28,4 @@ while True:
     # Sleep for some time to put delay between each read?
     posture_data = read_data()
     posture = classify_posture(posture_data)
-    # Process posture
+    # Process posture (notification and storage)
