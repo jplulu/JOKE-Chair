@@ -4,8 +4,11 @@ from sklearn.metrics import confusion_matrix
 
 class RandomForest:
 
-    def __init__(self, params, x_train=None, y_train=None):
-        self.classifier = RandomForestClassifier(**params)
+    def __init__(self, params=None, x_train=None, y_train=None):
+        if params == None:
+            self.classifier = RandomForestClassifier()
+        else:
+            self.classifier = RandomForestClassifier(**params)
         self.predictions = []
         self.x_train = x_train
         self.y_train = y_train
