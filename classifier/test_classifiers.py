@@ -29,7 +29,6 @@ def test_clf(clf, seed):
     df_shuffle = df.sample(frac=1).drop(['Baseline'], axis=1)
     df_x = df_shuffle.drop(['Label'], axis=1).values
     df_y = df_shuffle['Label'].values
-
     # Standardizing predictors to zero mean unit variance
     df_x = (df_x - df_x.mean()) / df_x.std()
 

@@ -1,8 +1,8 @@
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neighbors import KNeighborsClassifier
 
 class KNearestNeighbor:
     def __init__(self):
-        self.classifier = KNeighborsRegressor()
+        self.classifier = KNeighborsClassifier()
 
     def fit(self, x_train, y_train):
         return self.classifier.fit(x_train, y_train)
