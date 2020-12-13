@@ -53,7 +53,7 @@ def collect(ser, output):
     df['Label'] = 'left leg cross'
     df['Baseline'] = ",".join(baseline.astype(str))
     # for i in range(1, 5):
-        # df = df[df['Reading '+ str(i)] > baseline[i-1] + 50]
+    # df = df[df['Reading '+ str(i)] > baseline[i-1] + 50]
     df = df[300:]
     df.to_csv('../data/left_leg_cross_kevin.csv', index=False)
 
