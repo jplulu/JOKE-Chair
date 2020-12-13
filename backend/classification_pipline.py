@@ -3,8 +3,10 @@ import numpy as np
 from joblib import load
 
 NUM_SENSORS = 8
+CLASSIFIER_FILE = "../classifier/logistic_regression_model.pkl"
 
-clf = load('classifier.joblib')
+clf = load(CLASSIFIER_FILE)
+print(clf)
 ser = serial.Serial('COM29', 9600)
 ser.flushInput()
 
@@ -21,8 +23,7 @@ def read_data(baseline):
 
     return posture_data
 
-
-def classify_posture(posture_data):
+def classify_posture(clf, posture_data):
     prediction = clf.predict(posture_data)
     return prediction
 
@@ -46,9 +47,10 @@ def calibrate():
 
 baseline = calibrate()
 
-while True:
-    # TODO: Auto-Calibration?
-    # Sleep for some time to put delay between each read?
-    posture_data = read_data(baseline)
-    posture = classify_posture(posture_data)
-    # Process posture (notification and storage)
+if __name__=="__main__":
+    while True:
+        # TODO: Auto-Calibration?
+        # Sleep for some time to put delay between each read?
+        posture_data = read_data(baseline)
+        posture = classify_posture(posture_data)
+        # Process posture (notification and storage)
