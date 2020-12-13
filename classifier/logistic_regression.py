@@ -23,11 +23,10 @@ class LogisticRegressionClassifier:
         joblib.dump(self.clf, file_name)
 
 
-df = pd.read_csv('../data/varied_data.csv')
+df = pd.read_csv('../data/combined_data.csv')
 # Get dictionary for categorical coding
 c = df.Label.astype('category')
 code_to_posture = dict(enumerate(c.cat.categories))
-print(code_to_posture)
 # Categorical coding
 df['Label'] = df['Label'].astype('category').cat.codes
 
@@ -63,7 +62,8 @@ y_predict = clf.predict(x_test)
 predicted_postures = []
 for y in y_predict:
     predicted_postures.append(code_to_posture[y])
+print(predicted_postures)
 
 print(clf.score(x_test, y_test))
-# file_name = "logistic_regression_model.pkl"
-# clf.export(file_name)
+file_name = "logistic_regression_model.pkl"
+clf.export(file_name)
