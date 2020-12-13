@@ -11,7 +11,7 @@ ser = serial.Serial('COM29', 9600)
 ser.flushInput()
 
 
-def read_data(baseline):
+def read_data():
     posture_data = []
     while len(posture_data) != NUM_SENSORS:
         ser.flushInput()
@@ -23,7 +23,9 @@ def read_data(baseline):
 
     return posture_data
 
-def classify_posture(clf, posture_data):
+
+def classify_posture(posture_data):
+    posture_data = (posture_data - posture_data.mean()) / posture_data.std()
     prediction = clf.predict(posture_data)
     return prediction
 
@@ -45,12 +47,12 @@ def calibrate():
     return baseline
 
 
-baseline = calibrate()
+# baseline = calibrate()
 
-if __name__=="__main__":
+if __name__ == "__main__":
     while True:
         # TODO: Auto-Calibration?
         # Sleep for some time to put delay between each read?
-        posture_data = read_data(baseline)
+        posture_data = read_data()
         posture = classify_posture(posture_data)
         # Process posture (notification and storage)
