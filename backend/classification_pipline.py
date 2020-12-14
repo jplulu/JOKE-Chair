@@ -5,8 +5,8 @@ from joblib import load
 NUM_SENSORS = 8
 CLASSIFIER_FILE = "../classifier/logistic_regression_model.pkl"
 
-clf = load(CLASSIFIER_FILE)
-print(clf)
+# clf = load(CLASSIFIER_FILE)
+# print(clf)
 ser = serial.Serial('COM29', 9600)
 ser.flushInput()
 

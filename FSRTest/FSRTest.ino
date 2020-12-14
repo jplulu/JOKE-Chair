@@ -1,8 +1,8 @@
 // Seat sensors
-#define FSR1 A5
-#define FSR2 A4
-#define FSR3 A6
-#define FSR4 A7
+#define FSR1 A5 // front left
+#define FSR2 A4 // front right
+#define FSR3 A6 // back left
+#define FSR4 A7 // back right
 
 // Back sensors
 #define FSR5 A0 // top right

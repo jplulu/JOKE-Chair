@@ -1,8 +1,24 @@
 import joblib
-from classification_pipline import classify_posture, read_data
+from backend.classification_pipline import classify_posture, read_data
 import os
+import time
+import pandas as pd
 
-CLASSIFIER_FILE = ""
+
+
+df = pd.read_csv('data/combined_data.csv')
+# Get dictionary for categorical coding
+c = df.Label.astype('category')
+code_to_posture = dict(enumerate(c.cat.categories))
+# Categorical coding
+# df['Label'] = df['Label'].astype('category').cat.codes
+# inv_map = {v: k for k, v in code_to_posture.items()}
+
+
+# print(code_to_posture)
+# exit(0)
+
+CLASSIFIER_FILE = "classifier/logistic_regression_model.pkl"
 
 classifier = joblib.load(CLASSIFIER_FILE)
 
@@ -13,5 +29,5 @@ while True:
 
     if prev_posture != classification:
         os.system('cls')
-        print(classification)
+        print(code_to_posture[classification])
         prev_posture = classification
