@@ -43,6 +43,13 @@ def test_clf(clf, seed):
     predicted_postures = []
     for y in y_predict:
         predicted_postures.append(code_to_posture[y])
+
+    if isinstance(clf, KNearestNeighbor):
+        print(x_test)
+        knn_pred = clf.predict_proba(x_test)
+        print(knn_pred)
+        print(y_test)
+        return clf.score(x_test, y_test)
     return clf.score(x_test, y_test)
 
 if __name__ == '__main__':
@@ -52,9 +59,10 @@ if __name__ == '__main__':
 
     test_seed = np.random.randint(10000)
 
-    knn_score = test_clf(knn_clf, test_seed)
+    knn_score= test_clf(knn_clf, test_seed)
     rf_score = test_clf(rf_clf, test_seed)
     lr_score = test_clf(lr_clf, test_seed)
+
 
     score = [knn_score, rf_score, lr_score]
     print(score)

@@ -10,6 +10,9 @@ class KNearestNeighbor:
     def predict(self, x_train):
         return self.classifier.predict(x_train)
 
+    def predict_proba(self, x_train):
+        return self.classifier.predict_proba(x_train)
+
     def set_param(self, param):
         return self.classifier.set_params(**param)
 

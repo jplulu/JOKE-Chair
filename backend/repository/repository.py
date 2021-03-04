@@ -1,11 +1,12 @@
-from sqlalchemy import create_engine, or_, and_
 from sqlalchemy.orm import sessionmaker
-from typing import List
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import create_engine, or_, and_
+from backend.db import db
+from backend.db.model import TrainingData, UserDataModel
 
-from backend.model import TrainingData, UserDataModel
-
-session = sessionmaker()
+engine = create_engine('mysql+pymysql:///posturechair')
+Session = sessionmaker(bind=engine)
+session = Session()
 
 class TrainingDataRepository:
     def __init__(self):
