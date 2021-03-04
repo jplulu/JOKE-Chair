@@ -1,18 +1,51 @@
 from flask import Blueprint, request, jsonify
 from backend.repository.repository import TrainingDataRepository
 from backend.db.model import TrainingData
-test_routes = Blueprint('test_routes', __name__, url_prefix='/')
+test_routes = Blueprint('test_routes', __name__, url_prefix='/user')
 
 TrainingDataRepository = TrainingDataRepository()
 
-@test_routes.route('user/get_traindata',methods=['GET'])
+@test_routes.route('/get_traindata',methods=['GET'])
 def get_usrdata():
+    """
+    INPUT: Takes arg request from url
+    URL format example: http://127.0.0.1:5000/user/get_traindata?uid=1
+        for user with uid = 1
+
+    Output: Returns all readings of user with corresponding uid
+
+    TODO: Add user verification so can only use associated uid and cant access other data through url.
+    :return:
+    """
     uid = request.args.get('uid')
-    return jsonify(str(TrainingDataRepository.retrieve_user_trainingdata(uid=uid)))
+    if uid is None:
+        return jsonify({"error": "Missing request parameters"}), 400
+    if not uid.isdigit():
+        return jsonify({"error": "Invalid id"}), 400
+
+    usr_data = TrainingDataRepository.retrieve_user_trainingdata(uid=uid)
+    formatted_data = []
+    for data in usr_data:
+        formatted_data.append(data.serialize())
+    return jsonify(formatted_data), 200
 
 
-@test_routes.route('user/add_traindata',methods=['POST'])
+@test_routes.route('/add_traindata',methods=['POST'])
 def add_usrdata():
+    """
+    INPUT: Takes POST request + json object.
+    Json format
+    {
+        "uid": INT
+        "timestamp": MYSQL format timestamp
+        "sensor": Array of sensor readings
+        "classification": Classification of posture
+    }
+    Inserts json info into database
+    OUTPUT: Outputs created TrainingData entry with code 200
+
+    :return:
+    """
     data = request.get_json()
     uid = data["uid"]
     timestamp = data["timestamp"]
@@ -23,8 +56,13 @@ def add_usrdata():
     TrainingDataRepository.insert_user_trainingdata(train_dat)
     return jsonify(str(train_dat)), 200
 
-@test_routes.route('user/clear_traindata',methods=['DELETE'])
+@test_routes.route('/clear_traindata',methods=['DELETE'])
 def clear_usrdata():
+    """
+    INPUT: Takes DELETE REQUEST
+    OUTPUT: Outputs small string confirming deletion of data
+    :return:
+    """
     uid = request.args.get('uid')
     TrainingDataRepository.clear_user_trainingdata(uid=uid)
-    return jsonify("DATA CLEARED FOR " + str(uid))
+    return jsonify("DATA CLEARED FOR " + str(uid)), 200

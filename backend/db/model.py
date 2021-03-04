@@ -1,10 +1,4 @@
-from datetime import datetime
-
 from sqlalchemy.dialects.mysql import TIMESTAMP
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Integer, Column, ForeignKey, create_engine, BLOB, MetaData
-from sqlalchemy.types import Text, JSON, LargeBinary, String, PickleType
-from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.exc import OperationalError
 from backend.db import db
 
@@ -43,6 +37,16 @@ class TrainingData(db.Model):
                ", sensor5=%s, sensor6=%s, sensor7=%s, sensor8=%s, classification=%s)>" % (self.uid, self.timestamp,
         self.sensor1, self.sensor2, self.sensor3, self.sensor4, self.sensor5, self.sensor6, self.sensor7, self.sensor8,
                                                                                           self.classification)
+    def serialize(self):
+        aggregate_sensors = [self.sensor1, self.sensor2, self.sensor3, self.sensor4, self.sensor5, self.sensor6,
+                             self.sensor7, self.sensor8]
+        payload = {
+            "uid": self.uid,
+            "timestamp": self.timestamp,
+            "sensor": aggregate_sensors,
+            "classification":self.classification
+        }
+        return payload
 
 
 class UserDataModel(db.Model):
