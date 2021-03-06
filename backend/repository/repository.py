@@ -35,9 +35,11 @@ class UserDataModelRepository:
         try:
             self.session.add(datamodel)
             self.session.commit()
+            return 0
         except IntegrityError:
             print("User data model already exists.")
             self.session.rollback()
+            return -1
 
     def retrieve_user_datamodel(self, uid: int):
         return self.session.query(UserDataModel).filter(UserDataModel.uid == uid).first()
