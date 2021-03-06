@@ -1,11 +1,12 @@
-from sqlalchemy import create_engine, or_, and_
 from sqlalchemy.orm import sessionmaker
-from typing import List
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import create_engine, or_, and_
+from backend.db import db
+from backend.db.model import TrainingData, UserDataModel
 
-from backend.model import TrainingData, UserDataModel
-
-session = sessionmaker()
+engine = create_engine('mysql+pymysql:///posturechair')
+Session = sessionmaker(bind=engine)
+session = Session()
 
 class TrainingDataRepository:
     def __init__(self):
@@ -46,6 +47,6 @@ class UserDataModelRepository:
         user_datamodel.datamodel = datamodel.datamodel
         self.session.commit()
 
-    def delete_user_datamodel(self, datamodel: UserDataModel):
-        self.session(UserDataModel).filter(UserDataModel == datamodel).delete(synchronize_session='fetch')
+    def delete_user_datamodel(self, uid: int):
+        self.session(UserDataModel).filter(UserDataModel.uid == uid).delete(synchronize_session='fetch')
         self.session.commit()

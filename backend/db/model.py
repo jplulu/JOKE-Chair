@@ -1,28 +1,22 @@
-from datetime import datetime
-
 from sqlalchemy.dialects.mysql import TIMESTAMP
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Integer, Column, ForeignKey, create_engine, BLOB, MetaData
-from sqlalchemy.types import Text, JSON, LargeBinary, String, PickleType
-from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.exc import OperationalError
+from backend.db import db
 
-Base = declarative_base()
 
-class TrainingData(Base):
+class TrainingData(db.Model):
     __tablename__ = "trainingdata"
 
-    uid = Column(Integer, primary_key=True)
-    timestamp = Column(TIMESTAMP, primary_key=True)
-    sensor1 = Column(Integer)
-    sensor2 = Column(Integer)
-    sensor3 = Column(Integer)
-    sensor4 = Column(Integer)
-    sensor5 = Column(Integer)
-    sensor6 = Column(Integer)
-    sensor7 = Column(Integer)
-    sensor8 = Column(Integer)
-    classification = Column(String)
+    uid = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(TIMESTAMP, primary_key=True)
+    sensor1 = db.Column(db.Integer)
+    sensor2 = db.Column(db.Integer)
+    sensor3 = db.Column(db.Integer)
+    sensor4 = db.Column(db.Integer)
+    sensor5 = db.Column(db.Integer)
+    sensor6 = db.Column(db.Integer)
+    sensor7 = db.Column(db.Integer)
+    sensor8 = db.Column(db.Integer)
+    classification = db.Column(db.String(32))
 
     def __init__(self, uid, timestamp, sensor1, sensor2, sensor3,
                  sensor4, sensor5, sensor6, sensor7, sensor8, classification):
@@ -43,13 +37,23 @@ class TrainingData(Base):
                ", sensor5=%s, sensor6=%s, sensor7=%s, sensor8=%s, classification=%s)>" % (self.uid, self.timestamp,
         self.sensor1, self.sensor2, self.sensor3, self.sensor4, self.sensor5, self.sensor6, self.sensor7, self.sensor8,
                                                                                           self.classification)
+    def serialize(self):
+        aggregate_sensors = [self.sensor1, self.sensor2, self.sensor3, self.sensor4, self.sensor5, self.sensor6,
+                             self.sensor7, self.sensor8]
+        payload = {
+            "uid": self.uid,
+            "timestamp": self.timestamp,
+            "sensor": aggregate_sensors,
+            "classification":self.classification
+        }
+        return payload
 
 
-class UserDataModel(Base):
+class UserDataModel(db.Model):
     __tablename__ = "userdatamodel"
 
-    uid = Column(Integer, primary_key=True)
-    datamodel = Column(PickleType)
+    uid = db.Column(db.Integer, primary_key=True)
+    datamodel = db.Column(db.PickleType)
 
     def __init__(self, uid, datamodel):
         self.uid = uid
@@ -59,5 +63,13 @@ class UserDataModel(Base):
         return "<UserDataModel(uid=%s, datamodel=%s)>" % (self.uid, self.datamodel)
 
 
+if __name__ == "__main__":
+    try:
+        db.engine.execute("DROP DATABASE posturechair;")
+    except OperationalError:
+        print("DB does not exist")
+    db.engine.execute("CREATE DATABASE posturechair;")
+    db.engine.execute("USE posturechair;")
 
+    db.create_all()
 
