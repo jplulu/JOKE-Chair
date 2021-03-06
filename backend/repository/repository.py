@@ -47,6 +47,6 @@ class UserDataModelRepository:
         user_datamodel.datamodel = datamodel.datamodel
         self.session.commit()
 
-    def delete_user_datamodel(self, datamodel: UserDataModel):
-        self.session(UserDataModel).filter(UserDataModel == datamodel).delete(synchronize_session='fetch')
+    def delete_user_datamodel(self, uid: int):
+        self.session(UserDataModel).filter(UserDataModel.uid == uid).delete(synchronize_session='fetch')
         self.session.commit()
