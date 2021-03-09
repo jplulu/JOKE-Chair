@@ -22,9 +22,8 @@ def get_usrmodel():
         return jsonify({"error": "Invalid id"}), 400
 
     usr_data = UserDataModelRepository.retrieve_user_datamodel(uid)
-    usr_data.datamodel = usr_data.datamodel.decode('utf-8')
-    print(usr_data.datamodel)
-    return jsonify(str(usr_data)), 200
+    f = open(usr_data.datamodel, "r").read()
+    return jsonify(f), 200
 
 @usermodel_routes.route('/insert_model',methods=['POST'])
 def insert_datamodel():
@@ -34,10 +33,10 @@ def insert_datamodel():
     Output: Returns inserted datamodel if successful otherwise, return error message
     :return:
     """
-    data = request.get_json()
-    uid = data["uid"]
-    pmml_model = data["pmml"]
-    datamodel = UserDataModel(1, pmml_model)
+    uid = request.form["uid"]
+    pmml_model = request.files["file"]
+    pmml_model.save(str(uid) + ".pmml")
+    datamodel = UserDataModel(uid, str(uid)+".pmml")
     returncode = UserDataModelRepository.insert_user_datamodel(datamodel)
 
     if returncode == 0:
