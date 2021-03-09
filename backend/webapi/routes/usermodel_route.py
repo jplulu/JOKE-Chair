@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
 from backend.repository.repository import UserDataModelRepository
 from backend.db.model import UserDataModel
+import zipfile
+
 usermodel_routes = Blueprint('usermodel_routes', __name__, url_prefix='/usermodel')
 
 UserDataModelRepository = UserDataModelRepository()
@@ -20,6 +22,8 @@ def get_usrmodel():
         return jsonify({"error": "Invalid id"}), 400
 
     usr_data = UserDataModelRepository.retrieve_user_datamodel(uid)
+    usr_data.datamodel = usr_data.datamodel.decode('utf-8')
+    print(usr_data.datamodel)
     return jsonify(str(usr_data)), 200
 
 @usermodel_routes.route('/insert_model',methods=['POST'])
@@ -32,8 +36,8 @@ def insert_datamodel():
     """
     data = request.get_json()
     uid = data["uid"]
-    datapickle = data["pickle"]
-    datamodel = UserDataModel(uid, datapickle)
+    pmml_model = data["pmml"]
+    datamodel = UserDataModel(1, pmml_model)
     returncode = UserDataModelRepository.insert_user_datamodel(datamodel)
 
     if returncode == 0:
