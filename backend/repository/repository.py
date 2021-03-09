@@ -53,13 +53,14 @@ class UserDataModelRepository:
             try:
                 self.session.add(datamodel)
                 self.session.commit()
-                return
+                return 0
             except IntegrityError:
                 print("User data model already exists.")
                 self.session.rollback()
-                return
+                return -1
         user_datamodel.datamodel = datamodel.datamodel
         self.session.commit()
+        return 0
 
     def delete_user_datamodel(self, uid: int):
         self.session(UserDataModel).filter(UserDataModel.uid == uid).delete(synchronize_session='fetch')

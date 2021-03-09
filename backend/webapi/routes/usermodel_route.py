@@ -69,38 +69,43 @@ def get_usrmodel():
 def generate_model():
     data = request.get_json()
     uid = data['uid']
-    trainingdata = TrainingDataRepository.retrieve_user_trainingdata(uid=uid)
-    sensordata = []
-    clasif_data = []
-    for userdata in trainingdata:
-        sensorarray = []
-        sensorarray.append(userdata.sensor1)
-        sensorarray.append(userdata.sensor2)
-        sensorarray.append(userdata.sensor3)
-        sensorarray.append(userdata.sensor4)
-        sensorarray.append(userdata.sensor5)
-        sensorarray.append(userdata.sensor6)
-        sensorarray.append(userdata.sensor7)
-        sensorarray.append(userdata.sensor8)
-        sensordata.append(sensorarray.copy())
-        sensorarray.clear()
+    gen_flag = data['generate_model']
+    usermodel_filename = str(uid) + "_logreg.pmml"
+    returncode = 0
+    if gen_flag == True:
+        trainingdata = TrainingDataRepository.retrieve_user_trainingdata(uid=uid)
+        sensordata = []
+        clasif_data = []
+        for userdata in trainingdata:
+            sensorarray = []
+            sensorarray.append(userdata.sensor1)
+            sensorarray.append(userdata.sensor2)
+            sensorarray.append(userdata.sensor3)
+            sensorarray.append(userdata.sensor4)
+            sensorarray.append(userdata.sensor5)
+            sensorarray.append(userdata.sensor6)
+            sensorarray.append(userdata.sensor7)
+            sensorarray.append(userdata.sensor8)
+            sensordata.append(sensorarray.copy())
+            sensorarray.clear()
 
-        clasif_data.append(userdata.classification)
-    print("DONE")
-    print(sensordata)
+            clasif_data.append(userdata.classification)
 
-    pipeline = PMMLPipeline([
-        ("classifier", LogisticRegression(penalty='l2', max_iter=1000, solver='lbfgs', multi_class='multinomial'))
-    ])
-    pipeline.fit(sensordata, clasif_data)
-    sklearn2pmml(pipeline, str(uid) + "_logreg.pmml")
+        pipeline = PMMLPipeline([
+            ("classifier", LogisticRegression(penalty='l2', max_iter=1000, solver='lbfgs', multi_class='multinomial'))
+        ])
+        pipeline.fit(sensordata, clasif_data)
+        sklearn2pmml(pipeline, usermodel_filename)
 
-    datamodel = UserDataModel(uid, str(uid) + "_logreg.pmml")
-    UserDataModelRepository.update_user_datamodel(datamodel)
+        datamodel = UserDataModel(uid, usermodel_filename)
+        returncode = UserDataModelRepository.update_user_datamodel(datamodel)
+    try:
+        f = open(usermodel_filename, "r").read()
+    except FileNotFoundError:
+        return jsonify("Error: File not found"), 404
 
-    f = open(datamodel.datamodel, "r").read()
-    print(f)
     return jsonify(f),200
+
 
     #return send_from_directory(str(uid) + "_logreg.pmml")
 
