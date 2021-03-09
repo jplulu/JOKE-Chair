@@ -1,10 +1,11 @@
-from flask import Blueprint, request, jsonify, send_from_directory
+from flask import Blueprint, request, jsonify, send_file
 from backend.repository.repository import UserDataModelRepository
 from backend.repository.repository import TrainingDataRepository
 from backend.db.model import UserDataModel
 from sklearn2pmml.pipeline import PMMLPipeline
 from sklearn2pmml import sklearn2pmml
 from sklearn.linear_model import LogisticRegression
+import os
 
 usermodel_routes = Blueprint('usermodel_routes', __name__, url_prefix='/usermodel')
 
@@ -104,10 +105,12 @@ def generate_model():
     except FileNotFoundError:
         return jsonify("Error: File not found"), 404
 
-    return jsonify(f),200
+    # return jsonify(f),200
 
-
-    #return send_from_directory(str(uid) + "_logreg.pmml")
+    try:
+        return send_file(os.path.join(os.getcwd(),usermodel_filename), as_attachment=True)
+    except FileNotFoundError:
+        return jsonify("Error:File not found")
 
 
 @usermodel_routes.route('/', methods=['DELETE'])
