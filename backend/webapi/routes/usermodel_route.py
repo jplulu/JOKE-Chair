@@ -1,11 +1,16 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_from_directory
 from backend.repository.repository import UserDataModelRepository
+from backend.repository.repository import TrainingDataRepository
 from backend.db.model import UserDataModel
-import zipfile
+from sklearn2pmml.pipeline import PMMLPipeline
+from sklearn2pmml import sklearn2pmml
+from sklearn.linear_model import LogisticRegression
 
 usermodel_routes = Blueprint('usermodel_routes', __name__, url_prefix='/usermodel')
 
 UserDataModelRepository = UserDataModelRepository()
+TrainingDataRepository = TrainingDataRepository()
+
 
 @usermodel_routes.route('/get_model',methods=['GET'])
 def get_usrmodel():
@@ -25,40 +30,80 @@ def get_usrmodel():
     f = open(usr_data.datamodel, "r").read()
     return jsonify(f), 200
 
-@usermodel_routes.route('/insert_model',methods=['POST'])
-def insert_datamodel():
-    """
-    Input: Take json obj w/ uid & datamodel
-    Inserts input into repo
-    Output: Returns inserted datamodel if successful otherwise, return error message
-    :return:
-    """
-    uid = request.form["uid"]
-    pmml_model = request.files["file"]
-    pmml_model.save(str(uid) + ".pmml")
-    datamodel = UserDataModel(uid, str(uid)+".pmml")
-    returncode = UserDataModelRepository.insert_user_datamodel(datamodel)
+# @usermodel_routes.route('/insert_model',methods=['POST'])
+# def insert_datamodel():
+#     """
+#     Input: Take json obj w/ uid & datamodel
+#     Inserts input into repo
+#     Output: Returns inserted datamodel if successful otherwise, return error message
+#     :return:
+#     """
+#     uid = request.form["uid"]
+#     pmml_model = request.files["file"]
+#     pmml_model.save(str(uid) + ".pmml")
+#     datamodel = UserDataModel(uid, str(uid)+".pmml")
+#     returncode = UserDataModelRepository.insert_user_datamodel(datamodel)
+#
+#     if returncode == 0:
+#         return jsonify(str(datamodel)), 200
+#     else:
+#         return jsonify("FAILED TO INSERT DATAMODEL")
+#
+# @usermodel_routes.route('/update_model', methods=['POST'])
+# def update_datamodel():
+#     """
+#     Input: Take json obj w/ uid & datamodel
+#     Updates repo with new datamodel
+#     Output: Returns newly updated model
+#     :return:
+#     """
+#     data = request.get_json()
+#     uid = data["uid"]
+#     datapickle = data["pickle"]
+#     datamodel = UserDataModel(uid, datapickle)
+#     UserDataModelRepository.update_user_datamodel(datamodel)
+#
+#     return jsonify(str(datamodel)), 200
 
-    if returncode == 0:
-        return jsonify(str(datamodel)), 200
-    else:
-        return jsonify("FAILED TO INSERT DATAMODEL")
-
-@usermodel_routes.route('/update_model', methods=['POST'])
-def update_datamodel():
-    """
-    Input: Take json obj w/ uid & datamodel
-    Updates repo with new datamodel
-    Output: Returns newly updated model
-    :return:
-    """
+@usermodel_routes.route('/generate', methods=['POST'])
+def generate_model():
     data = request.get_json()
-    uid = data["uid"]
-    datapickle = data["pickle"]
-    datamodel = UserDataModel(uid, datapickle)
+    uid = data['uid']
+    trainingdata = TrainingDataRepository.retrieve_user_trainingdata(uid=uid)
+    sensordata = []
+    clasif_data = []
+    for userdata in trainingdata:
+        sensorarray = []
+        sensorarray.append(userdata.sensor1)
+        sensorarray.append(userdata.sensor2)
+        sensorarray.append(userdata.sensor3)
+        sensorarray.append(userdata.sensor4)
+        sensorarray.append(userdata.sensor5)
+        sensorarray.append(userdata.sensor6)
+        sensorarray.append(userdata.sensor7)
+        sensorarray.append(userdata.sensor8)
+        sensordata.append(sensorarray.copy())
+        sensorarray.clear()
+
+        clasif_data.append(userdata.classification)
+    print("DONE")
+    print(sensordata)
+
+    pipeline = PMMLPipeline([
+        ("classifier", LogisticRegression(penalty='l2', max_iter=1000, solver='lbfgs', multi_class='multinomial'))
+    ])
+    pipeline.fit(sensordata, clasif_data)
+    sklearn2pmml(pipeline, str(uid) + "_logreg.pmml")
+
+    datamodel = UserDataModel(uid, str(uid) + "_logreg.pmml")
     UserDataModelRepository.update_user_datamodel(datamodel)
 
-    return jsonify(str(datamodel)), 200
+    f = open(datamodel.datamodel, "r").read()
+    print(f)
+    return jsonify(f),200
+
+    #return send_from_directory(str(uid) + "_logreg.pmml")
+
 
 @usermodel_routes.route('/', methods=['DELETE'])
 def delete_datamodel():
