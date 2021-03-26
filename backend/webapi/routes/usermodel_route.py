@@ -31,41 +31,6 @@ def get_usrmodel():
     f = open(usr_data.datamodel, "r").read()
     return jsonify(f), 200
 
-# @usermodel_routes.route('/insert_model',methods=['POST'])
-# def insert_datamodel():
-#     """
-#     Input: Take json obj w/ uid & datamodel
-#     Inserts input into repo
-#     Output: Returns inserted datamodel if successful otherwise, return error message
-#     :return:
-#     """
-#     uid = request.form["uid"]
-#     pmml_model = request.files["file"]
-#     pmml_model.save(str(uid) + ".pmml")
-#     datamodel = UserDataModel(uid, str(uid)+".pmml")
-#     returncode = UserDataModelRepository.insert_user_datamodel(datamodel)
-#
-#     if returncode == 0:
-#         return jsonify(str(datamodel)), 200
-#     else:
-#         return jsonify("FAILED TO INSERT DATAMODEL")
-#
-# @usermodel_routes.route('/update_model', methods=['POST'])
-# def update_datamodel():
-#     """
-#     Input: Take json obj w/ uid & datamodel
-#     Updates repo with new datamodel
-#     Output: Returns newly updated model
-#     :return:
-#     """
-#     data = request.get_json()
-#     uid = data["uid"]
-#     datapickle = data["pickle"]
-#     datamodel = UserDataModel(uid, datapickle)
-#     UserDataModelRepository.update_user_datamodel(datamodel)
-#
-#     return jsonify(str(datamodel)), 200
-
 @usermodel_routes.route('/generate', methods=['POST'])
 def generate_model():
     data = request.get_json()
