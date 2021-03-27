@@ -88,3 +88,13 @@ def delete_datamodel():
     uid = request.args.get('uid')
     UserDataModelRepository.delete_user_datamodel(uid)
     return jsonify("DATA CLEARED FOR " + str(uid)), 200
+
+# In case need to back end predict
+@usermodel_routes.route('/predict', methods=['GET'])
+def predict_datamodel():
+
+    data = request.get_json()
+    uid = data['uid']
+    sensordata = data['sensor']
+    posture_classif = UserDataModelRepository.retrieve_user_datamodel(uid=uid)
+    return jsonify(posture_classif.datamodel.predict(sensordata)), 200
