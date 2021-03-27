@@ -98,4 +98,4 @@ def pmmlToJson(pmmlFilePath, jsonFilePath):
     print(jsonFilePath + " created")
 
 
-pmmlToJson("lr.pmml", "lr.json")
+# pmmlToJson("lr.pmml", "lr.json")

@@ -48,7 +48,7 @@ class UserDataModelRepository:
 
     def update_user_datamodel(self, datamodel: UserDataModel):
         try:
-            user_datamodel = session.query(UserDataModel).filter(UserDataModel == datamodel).one()
+            user_datamodel = session.query(UserDataModel).filter(UserDataModel.uid == datamodel.uid).one()
         except NoResultFound:
             try:
                 self.session.add(datamodel)

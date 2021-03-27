@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, send_file
 from backend.repository.repository import UserDataModelRepository
 from backend.repository.repository import TrainingDataRepository
 from backend.db.model import UserDataModel
+from classifier.pmmltojson import pmmlToJson
 from sklearn2pmml.pipeline import PMMLPipeline
 from sklearn2pmml import sklearn2pmml
 from sklearn.linear_model import LogisticRegression
@@ -28,8 +29,12 @@ def get_usrmodel():
         return jsonify({"error": "Invalid id"}), 400
 
     usr_data = UserDataModelRepository.retrieve_user_datamodel(uid)
-    f = open(usr_data.datamodel, "r").read()
-    return jsonify(f), 200
+
+    json_file = str(uid) + "_logreg.json"
+    pmmlToJson(usr_data.datamodel, json_file)
+    # f = open(json_file, "r").read()
+    # return jsonify(f), 200
+    return send_file(os.path.join(os.getcwd(),json_file), as_attachment=True)
 
 @usermodel_routes.route('/generate', methods=['POST'])
 def generate_model():
@@ -62,18 +67,14 @@ def generate_model():
         ])
         pipeline.fit(sensordata, clasif_data)
         sklearn2pmml(pipeline, usermodel_filename)
-
         datamodel = UserDataModel(uid, usermodel_filename)
         returncode = UserDataModelRepository.update_user_datamodel(datamodel)
-    try:
-        f = open(usermodel_filename, "r").read()
-    except FileNotFoundError:
-        return jsonify("Error: File not found"), 404
 
-    # return jsonify(f),200
+        json_file = str(uid) + "_logreg.json"
+        pmmlToJson(datamodel.datamodel, json_file)
 
     try:
-        return send_file(os.path.join(os.getcwd(),usermodel_filename), as_attachment=True)
+        return send_file(os.path.join(os.getcwd(),json_file), as_attachment=True)
     except FileNotFoundError:
         return jsonify("Error:File not found")
 
