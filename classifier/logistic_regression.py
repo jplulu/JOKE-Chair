@@ -63,7 +63,7 @@ pipeline = PMMLPipeline([
     ("classifier", LogisticRegression(penalty='l2', max_iter=1000, solver='lbfgs', multi_class='multinomial'))
 ])
 pipeline.fit(df_x, df_y)
-sklearn2pmml(pipeline, "logistic_regression.pmml")
+sklearn2pmml(pipeline, "lr.pmml")
 
 # clf = LogisticRegressionClassifier()
 # clf.fit(x_train, y_train)
