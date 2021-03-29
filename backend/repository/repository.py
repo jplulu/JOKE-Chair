@@ -2,11 +2,12 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import create_engine, or_, and_
 from backend.db import db
-from backend.db.model import TrainingData, UserDataModel
+from backend.db.model import TrainingData, UserDataModel, UserLogin
 
-engine = create_engine('mysql+pymysql:///posturechair')
+engine = create_engine('mysql+pymysql://root:123456@localhost/posturechair')
 Session = sessionmaker(bind=engine)
 session = Session()
+
 
 class TrainingDataRepository:
     def __init__(self):
@@ -26,6 +27,7 @@ class TrainingDataRepository:
     def clear_user_trainingdata(self, uid: int):
         self.session.query(TrainingData).filter(TrainingData.uid == uid).delete(synchronize_session='fetch')
         self.session.commit()
+
 
 class UserDataModelRepository:
     def __init__(self):
@@ -52,3 +54,27 @@ class UserDataModelRepository:
     def delete_user_datamodel(self, uid: int):
         self.session(UserDataModel).filter(UserDataModel.uid == uid).delete(synchronize_session='fetch')
         self.session.commit()
+
+
+class UserLoginRepository:
+    def __init__(self):
+        self.session = session
+
+    def insert_userlogin(self, userlogin: UserLogin):
+        try:
+            self.session.add(userlogin)
+            self.session.commit()
+            return 0
+        except IntegrityError:
+            print("User data model already exists.")
+            self.session.rollback()
+            return -1
+
+    def verify_userlogin(self, email, password):
+        return self.session.query(UserLogin).filter(UserLogin.email == email, UserLogin.password == password).first()
+
+
+
+if __name__ == "__main__":
+    repo = UserLoginRepository()
+    repo.insert_user_login(UserLogin('test', 'test'))

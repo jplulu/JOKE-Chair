@@ -74,16 +74,25 @@ class UserLogin(db.Model):
     email = db.Column(db.String(255))
     password = db.Column(db.String(255))
 
-    def __init__(self, uid, email, password):
-        self.uid = uid
+    def __init__(self, email, password):
+        # self.uid = uid
         self.email = email
         self.password = password
+
+    def serialize(self):
+        payload = {
+            "email": self.email,
+            "password": self.password,
+            "uid": self.uid
+        }
+        return payload
 
     def __repr__(self):
         return "<UserLogin(uid={}, email={}, password={}>".format(self.uid, self.email, self.password)
 
 
 if __name__ == "__main__":
+    print()
     try:
         db.engine.execute("DROP DATABASE posturechair;")
     except OperationalError:
