@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, request, jsonify, send_file
 from backend.repository.repository import UserDataModelRepository
 from backend.repository.repository import TrainingDataRepository
@@ -41,6 +43,7 @@ def generate_model():
     uid = request.args.get('uid')
     gen_flag = request.args.get('gen')
     usermodel_filename = str(uid) + "_logreg.pmml"
+    json_file = str(uid) + "_logreg.json"
     returncode = 0
     if gen_flag == True:
         trainingdata = TrainingDataRepository.retrieve_user_trainingdata(uid=uid)
@@ -69,11 +72,10 @@ def generate_model():
         datamodel = UserDataModel(uid, usermodel_filename)
         returncode = UserDataModelRepository.update_user_datamodel(datamodel)
 
-        # json_file = str(uid) + "_logreg.json"
-        # pmmlToJson(datamodel.datamodel, json_file)
+        pmmlToJson(datamodel.datamodel, json_file)
 
     try:
-        return send_file(os.path.join(os.getcwd(),usermodel_filename), as_attachment=True)
+        return jsonify(json.dumps(json.loads(open(json_file).read()))), 200
     except FileNotFoundError:
         return jsonify("Error:File not found")
 # @usermodel_routes.route('/generate', methods=['POST'])
