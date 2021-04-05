@@ -34,13 +34,12 @@ def get_usrmodel():
     pmmlToJson(usr_data.datamodel, json_file)
     # f = open(json_file, "r").read()
     # return jsonify(f), 200
-    return send_file(os.path.join(os.getcwd(),json_file), as_attachment=True)
+    return send_file(os.path.join(os.getcwd(),str(uid) + "_logreg.pmml"), as_attachment=True)
 
 @usermodel_routes.route('/generate', methods=['POST'])
 def generate_model():
-    data = request.get_json()
-    uid = data['uid']
-    gen_flag = data['generate_model']
+    uid = request.args.get('uid')
+    gen_flag = request.args.get('gen')
     usermodel_filename = str(uid) + "_logreg.pmml"
     returncode = 0
     if gen_flag == True:
@@ -70,13 +69,54 @@ def generate_model():
         datamodel = UserDataModel(uid, usermodel_filename)
         returncode = UserDataModelRepository.update_user_datamodel(datamodel)
 
-        json_file = str(uid) + "_logreg.json"
-        pmmlToJson(datamodel.datamodel, json_file)
+        # json_file = str(uid) + "_logreg.json"
+        # pmmlToJson(datamodel.datamodel, json_file)
 
     try:
-        return send_file(os.path.join(os.getcwd(),json_file), as_attachment=True)
+        return send_file(os.path.join(os.getcwd(),usermodel_filename), as_attachment=True)
     except FileNotFoundError:
         return jsonify("Error:File not found")
+# @usermodel_routes.route('/generate', methods=['POST'])
+# def generate_model():
+#     data = request.get_json()
+#     uid = data['uid']
+#     gen_flag = data['generate_model']
+#     usermodel_filename = str(uid) + "_logreg.pmml"
+#     returncode = 0
+#     if gen_flag == True:
+#         trainingdata = TrainingDataRepository.retrieve_user_trainingdata(uid=uid)
+#         sensordata = []
+#         clasif_data = []
+#         for userdata in trainingdata:
+#             sensorarray = []
+#             sensorarray.append(userdata.sensor1)
+#             sensorarray.append(userdata.sensor2)
+#             sensorarray.append(userdata.sensor3)
+#             sensorarray.append(userdata.sensor4)
+#             sensorarray.append(userdata.sensor5)
+#             sensorarray.append(userdata.sensor6)
+#             sensorarray.append(userdata.sensor7)
+#             sensorarray.append(userdata.sensor8)
+#             sensordata.append(sensorarray.copy())
+#             sensorarray.clear()
+#
+#             clasif_data.append(userdata.classification)
+#
+#         pipeline = PMMLPipeline([
+#             ("classifier", LogisticRegression(penalty='l2', max_iter=1000, solver='lbfgs', multi_class='multinomial'))
+#         ])
+#         pipeline.fit(sensordata, clasif_data)
+#         sklearn2pmml(pipeline, usermodel_filename)
+#         datamodel = UserDataModel(uid, usermodel_filename)
+#         returncode = UserDataModelRepository.update_user_datamodel(datamodel)
+#
+#         json_file = str(uid) + "_logreg.json"
+#         pmmlToJson(datamodel.datamodel, json_file)
+#
+#     try:
+#         return send_file(os.path.join(os.getcwd(),json_file), as_attachment=True)
+#     except FileNotFoundError:
+#         return jsonify("Error:File not found")
 
 
 @usermodel_routes.route('/', methods=['DELETE'])
