@@ -1,16 +1,16 @@
 import pandas as pd
 import sys
 
-POSTURES = ["proper", "lean forward", "lean right", "lean left", "slouch", "right leg cross", "left leg cross"]
+POSTURES = ["proper", "lean_forward", "lean_right", "lean_left", "slouch", "right_leg_cross", "left_leg_cross"]
 
 
 def generate_data_set(filename):
     data_set = pd.DataFrame()
     for posture in POSTURES:
-        df = pd.read_csv("{}.csv".format(posture))
-        data_set = pd.concat([data_set, df]).reset_index(drop=True)
+        df = pd.read_csv("data/{}.csv".format(posture))
+        data_set = pd.concat([data_set, df[:1000]]).reset_index(drop=True)
 
-    data_set.to_csv("{}.csv".format(filename), index=False)
+    data_set.to_csv("data/{}.csv".format(filename), index=False)
 
     exit(0)
 
