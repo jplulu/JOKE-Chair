@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify
+import collections
+
 from backend.repository.repository import TrainingDataRepository
 from backend.db.model import TrainingData
 traindata_routes = Blueprint('traindata_routes', __name__, url_prefix='/user')
@@ -82,3 +84,14 @@ def clear_usrdata():
     uid = request.args.get('uid')
     TrainingDataRepository.clear_user_trainingdata(uid=uid)
     return jsonify("DATA CLEARED FOR " + str(uid)), 200
+
+@traindata_routes.route('/suggest', methods=['GET'])
+def suggest_usrdata():
+    uid = request.args.get('uid')
+    data = TrainingDataRepository.retrieve_user_classif_trainingdata(uid=uid)
+    data = [int(value) for value, in data]
+    data_count = collections.Counter(data)
+    max_val = [keys for keys,values in data_count.items() if values == max(data_count.values())]
+    # Assume 0 is proper posture
+    max_val.remove(0)
+    return jsonify(max_val), 200

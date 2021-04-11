@@ -22,8 +22,11 @@ class TrainingDataRepository:
             print("Training data already exists.")
             self.session.rollback()
 
-    def retrieve_user_trainingdata(self, uid):
+    def retrieve_all_user_trainingdata(self, uid):
         return self.session.query(TrainingData).filter(TrainingData.uid == uid).all()
+
+    def retrieve_user_classif_trainingdata(self, uid):
+        return self.session.query(TrainingData.classification).filter(TrainingData.uid == uid).all()
 
     def clear_user_trainingdata(self, uid):
         self.session.query(TrainingData).filter(TrainingData.uid == uid).delete(synchronize_session='fetch')
