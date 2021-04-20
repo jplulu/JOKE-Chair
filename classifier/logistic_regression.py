@@ -26,7 +26,7 @@ class LogisticRegressionClassifier:
         joblib.dump(self.clf, file_name)
 
 
-df = pd.read_csv('../data/combined_data.csv')
+df = pd.read_csv('data/combined_data.csv')
 # Get dictionary for categorical coding
 c = df.Label.astype('category')
 code_to_posture = dict(enumerate(c.cat.categories))
@@ -78,4 +78,3 @@ sklearn2pmml(pipeline, "lr.pmml")
 # print(clf.score(x_test, y_test))
 # file_name = "logistic_regression_model.pkl"
 # clf.export(file_name)
-

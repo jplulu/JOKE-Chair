@@ -65,10 +65,11 @@ void loop() {
       Serial.print(',');
   }
   Serial.print('\n');
-  /*for(int i = 0; i < SIZE_OF_OUTPUT; i++){
+
+  for(int i = 0; i < SIZE_OF_OUTPUT; i++){
     outputBytes[2*i] = output[i];
     outputBytes[2*i + 1] = output[i] >> 8;
   }
-  SerialBT.write(outputBytes, 20);*/
+  SerialBT.write(outputBytes, 20);
   delay(10);
 }

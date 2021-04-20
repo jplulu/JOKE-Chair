@@ -3,10 +3,14 @@ import numpy as np
 from classifier.logistic_regression import LogisticRegressionClassifier
 from classifier.random_forest import RandomForest
 from classifier.knearestneighbor import KNearestNeighbor
+import joblib
+from sklearn2pmml import sklearn2pmml
+from sklearn_pandas import DataFrameMapper
+
 
 
 def test_clf(clf, seed):
-    df = pd.read_csv('../data/combined_data.csv')
+    df = pd.read_csv('data/combined_data.csv')
     # Get dictionary for categorical coding
     c = df.Label.astype('category')
     code_to_posture = dict(enumerate(c.cat.categories))
@@ -50,7 +54,13 @@ def test_clf(clf, seed):
         print(knn_pred)
         print(y_test)
         return clf.score(x_test, y_test)
+
+    if isinstance(clf, LogisticRegressionClassifier):
+        mapper = 
+        joblib.dump(clf, 'test_clf.pkl')
+
     return clf.score(x_test, y_test)
+
 
 if __name__ == '__main__':
     knn_clf = KNearestNeighbor()
@@ -59,10 +69,9 @@ if __name__ == '__main__':
 
     test_seed = np.random.randint(10000)
 
-    knn_score= test_clf(knn_clf, test_seed)
+    knn_score = test_clf(knn_clf, test_seed)
     rf_score = test_clf(rf_clf, test_seed)
     lr_score = test_clf(lr_clf, test_seed)
-
 
     score = [knn_score, rf_score, lr_score]
     print(score)
