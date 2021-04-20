@@ -64,3 +64,17 @@ pipeline = PMMLPipeline([
 ])
 pipeline.fit(df_x, df_y)
 sklearn2pmml(pipeline, "lr.pmml")
+
+# clf = LogisticRegressionClassifier()
+# clf.fit(x_train, y_train)
+# y_predict = clf.predict(x_test)
+#
+# # Converting coding back to posture
+# predicted_postures = []
+# for y in y_predict:
+#     predicted_postures.append(code_to_posture[y])
+# print(predicted_postures)
+#
+# print(clf.score(x_test, y_test))
+# file_name = "logistic_regression_model.pkl"
+# clf.export(file_name)

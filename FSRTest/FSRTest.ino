@@ -65,6 +65,7 @@ void loop() {
       Serial.print(',');
   }
   Serial.print('\n');
+
   for(int i = 0; i < SIZE_OF_OUTPUT; i++){
     outputBytes[2*i] = output[i];
     outputBytes[2*i + 1] = output[i] >> 8;
