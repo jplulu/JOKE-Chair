@@ -2,7 +2,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import create_engine, or_, and_
 from backend.db import db
-from backend.db.model import TrainingData, UserDataModel, UserLogin
+from backend.db.model import TrainingData, UserDataModel, UserLogin, PostureData
 
 engine = create_engine('mysql+pymysql://root:123456@localhost/posturechair')
 Session = sessionmaker(bind=engine)
@@ -53,6 +53,26 @@ class UserDataModelRepository:
 
     def delete_user_datamodel(self, uid: int):
         self.session(UserDataModel).filter(UserDataModel.uid == uid).delete(synchronize_session='fetch')
+        self.session.commit()
+
+
+class PostureDataRepository:
+    def __init__(self):
+        self.session = session
+
+    def insert_user_posturedata(self, posturedata: PostureData):
+        try:
+            self.session.add(posturedata)
+            self.session.commit()
+        except IntegrityError:
+            print("Training data already exists.")
+            self.session.rollback()
+
+    def retrieve_user_posturedata(self, uid: int):
+        return self.session.query(PostureData).filter(PostureData.uid == uid).all()
+
+    def clear_user_posturedata(self, uid: int):
+        self.session.query(PostureData).filter(PostureData.uid == uid).delete(synchronize_session='fetch')
         self.session.commit()
 
 
