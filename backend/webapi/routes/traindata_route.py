@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify
+import collections
+
 from backend.repository.repository import TrainingDataRepository
 from backend.db.model import TrainingData
 traindata_routes = Blueprint('traindata_routes', __name__, url_prefix='/user')
@@ -51,10 +53,26 @@ def add_usrdata():
     timestamp = data["timestamp"]
     sensor = data["sensors"]
     classif = data["classification"]
-    train_dat = TrainingData(uid, timestamp, sensor[0], sensor[1], sensor[2], sensor[3], sensor[4]
-                             , sensor[5], sensor[6], sensor[7], classif)
-    TrainingDataRepository.insert_user_trainingdata(train_dat)
-    return jsonify(str(train_dat)), 200
+
+    list_length = len(uid)
+    if all(len(x) == list_length for x in [uid, timestamp, sensor, classif]):
+        created_data = []
+        for element in range(list_length):
+            train_dat = TrainingData(uid[element], timestamp[element], sensor[element][0], sensor[element][1],
+                                     sensor[element][2], sensor[element][3], sensor[element][4]
+                                     , sensor[element][5], sensor[element][6], sensor[element][7], classif[element])
+            TrainingDataRepository.insert_user_trainingdata(train_dat)
+            created_data += [train_dat]
+        return jsonify(str(created_data)), 200
+    else:
+        return jsonify("Wrong length."), 400
+
+
+
+    # train_dat = TrainingData(uid, timestamp, sensor[0], sensor[1], sensor[2], sensor[3], sensor[4]
+    #                          , sensor[5], sensor[6], sensor[7], classif)
+    # TrainingDataRepository.insert_user_trainingdata(train_dat)
+    # return jsonify(str(train_dat)), 200
 
 @traindata_routes.route('/',methods=['DELETE'])
 def clear_usrdata():
@@ -66,3 +84,14 @@ def clear_usrdata():
     uid = request.args.get('uid')
     TrainingDataRepository.clear_user_trainingdata(uid=uid)
     return jsonify("DATA CLEARED FOR " + str(uid)), 200
+
+@traindata_routes.route('/suggest', methods=['GET'])
+def suggest_usrdata():
+    uid = request.args.get('uid')
+    data = TrainingDataRepository.retrieve_user_classif_trainingdata(uid=uid)
+    data = [int(value) for value, in data]
+    data_count = collections.Counter(data)
+    max_val = [keys for keys,values in data_count.items() if values == max(data_count.values())]
+    # Assume 0 is proper posture
+    max_val.remove(0)
+    return jsonify(max_val), 200
