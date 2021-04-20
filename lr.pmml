@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.4">
+	<Header>
+		<Application name="JPMML-SkLearn" version="1.6.17"/>
+		<Timestamp>2021-04-20T16:28:13Z</Timestamp>
+	</Header>
+	<DataDictionary>
+		<DataField name="y" optype="categorical" dataType="integer">
+			<Value value="0"/>
+			<Value value="1"/>
+			<Value value="2"/>
+			<Value value="3"/>
+			<Value value="4"/>
+			<Value value="5"/>
+			<Value value="6"/>
+		</DataField>
+		<DataField name="x1" optype="continuous" dataType="double"/>
+		<DataField name="x2" optype="continuous" dataType="double"/>
+		<DataField name="x3" optype="continuous" dataType="double"/>
+		<DataField name="x4" optype="continuous" dataType="double"/>
+		<DataField name="x5" optype="continuous" dataType="double"/>
+		<DataField name="x6" optype="continuous" dataType="double"/>
+		<DataField name="x7" optype="continuous" dataType="double"/>
+		<DataField name="x8" optype="continuous" dataType="double"/>
+		<DataField name="x9" optype="continuous" dataType="double"/>
+		<DataField name="x10" optype="continuous" dataType="double"/>
+	</DataDictionary>
+	<RegressionModel functionName="classification" algorithmName="sklearn.linear_model._logistic.LogisticRegression" normalizationMethod="softmax">
+		<MiningSchema>
+			<MiningField name="y" usageType="target"/>
+			<MiningField name="x1"/>
+			<MiningField name="x2"/>
+			<MiningField name="x3"/>
+			<MiningField name="x4"/>
+			<MiningField name="x5"/>
+			<MiningField name="x6"/>
+			<MiningField name="x7"/>
+			<MiningField name="x8"/>
+			<MiningField name="x9"/>
+			<MiningField name="x10"/>
+		</MiningSchema>
+		<Output>
+			<OutputField name="probability(0)" optype="continuous" dataType="double" feature="probability" value="0"/>
+			<OutputField name="probability(1)" optype="continuous" dataType="double" feature="probability" value="1"/>
+			<OutputField name="probability(2)" optype="continuous" dataType="double" feature="probability" value="2"/>
+			<OutputField name="probability(3)" optype="continuous" dataType="double" feature="probability" value="3"/>
+			<OutputField name="probability(4)" optype="continuous" dataType="double" feature="probability" value="4"/>
+			<OutputField name="probability(5)" optype="continuous" dataType="double" feature="probability" value="5"/>
+			<OutputField name="probability(6)" optype="continuous" dataType="double" feature="probability" value="6"/>
+		</Output>
+		<RegressionTable intercept="-14.577944914065935" targetCategory="0">
+			<NumericPredictor name="x1" coefficient="3.9687407567295967"/>
+			<NumericPredictor name="x2" coefficient="2.0329726502740724"/>
+			<NumericPredictor name="x3" coefficient="-1.0224722282632617"/>
+			<NumericPredictor name="x4" coefficient="1.0040066839404027"/>
+			<NumericPredictor name="x5" coefficient="1.8514505089843378"/>
+			<NumericPredictor name="x6" coefficient="-0.8109089420667441"/>
+			<NumericPredictor name="x7" coefficient="-0.6110725682993258"/>
+			<NumericPredictor name="x8" coefficient="-1.6279887036263696"/>
+			<NumericPredictor name="x9" coefficient="-7.470716364156842"/>
+			<NumericPredictor name="x10" coefficient="-1.0597339707829074"/>
+		</RegressionTable>
+		<RegressionTable intercept="3.1258152412867495" targetCategory="1">
+			<NumericPredictor name="x1" coefficient="-0.7802696821796538"/>
+			<NumericPredictor name="x2" coefficient="3.6437076372077652"/>
+			<NumericPredictor name="x3" coefficient="-0.45829953662867506"/>
+			<NumericPredictor name="x4" coefficient="-3.8485891930760183"/>
+			<NumericPredictor name="x5" coefficient="-0.0843499445170813"/>
+			<NumericPredictor name="x6" coefficient="-1.7484985183685517"/>
+			<NumericPredictor name="x7" coefficient="-1.863500054502579"/>
+			<NumericPredictor name="x8" coefficient="2.276614263691066"/>
+			<NumericPredictor name="x9" coefficient="2.7369623026233683"/>
+			<NumericPredictor name="x10" coefficient="-3.4324562760182444"/>
+		</RegressionTable>
+		<RegressionTable intercept="5.03987954833205" targetCategory="2">
+			<NumericPredictor name="x1" coefficient="-0.567877935163106"/>
+			<NumericPredictor name="x2" coefficient="-2.4388079979203603"/>
+			<NumericPredictor name="x3" coefficient="1.9768739344194077"/>
+			<NumericPredictor name="x4" coefficient="1.947081239918363"/>
+			<NumericPredictor name="x5" coefficient="-1.0058152718819198"/>
+			<NumericPredictor name="x6" coefficient="1.4371038506735412"/>
+			<NumericPredictor name="x7" coefficient="3.0893514916019598"/>
+			<NumericPredictor name="x8" coefficient="-1.657799217688578"/>
+			<NumericPredictor name="x9" coefficient="-3.191448708837943"/>
+			<NumericPredictor name="x10" coefficient="2.7212980344255446"/>
+		</RegressionTable>
+		<RegressionTable intercept="8.954785090616811" targetCategory="3">
+			<NumericPredictor name="x1" coefficient="-2.1259993525124674"/>
+			<NumericPredictor name="x2" coefficient="-2.766915766775492"/>
+			<NumericPredictor name="x3" coefficient="0.9527006224250812"/>
+			<NumericPredictor name="x4" coefficient="2.103033576386832"/>
+			<NumericPredictor name="x5" coefficient="-0.4701550298493769"/>
+			<NumericPredictor name="x6" coefficient="0.182407866043373"/>
+			<NumericPredictor name="x7" coefficient="1.4467738995305135"/>
+			<NumericPredictor name="x8" coefficient="2.8308320841695935"/>
+			<NumericPredictor name="x9" coefficient="4.741938694774916"/>
+			<NumericPredictor name="x10" coefficient="0.20836835770283538"/>
+		</RegressionTable>
+		<RegressionTable intercept="-13.13396908064025" targetCategory="4">
+			<NumericPredictor name="x1" coefficient="-1.3519664870950536"/>
+			<NumericPredictor name="x2" coefficient="3.1322770290905453"/>
+			<NumericPredictor name="x3" coefficient="-0.9238702186579191"/>
+			<NumericPredictor name="x4" coefficient="4.710815245698463"/>
+			<NumericPredictor name="x5" coefficient="0.9641029434401408"/>
+			<NumericPredictor name="x6" coefficient="-1.1168617230612536"/>
+			<NumericPredictor name="x7" coefficient="-3.402847062692429"/>
+			<NumericPredictor name="x8" coefficient="-3.0397195233093433"/>
+			<NumericPredictor name="x9" coefficient="2.88926673803401"/>
+			<NumericPredictor name="x10" coefficient="-3.822129698146016"/>
+		</RegressionTable>
+		<RegressionTable intercept="0.6978111596536626" targetCategory="5">
+			<NumericPredictor name="x1" coefficient="0.5850853843554596"/>
+			<NumericPredictor name="x2" coefficient="-4.639170150991591"/>
+			<NumericPredictor name="x3" coefficient="-2.25402461910321"/>
+			<NumericPredictor name="x4" coefficient="-6.212801014560872"/>
+			<NumericPredictor name="x5" coefficient="-1.731627835816419"/>
+			<NumericPredictor name="x6" coefficient="4.884916313837029"/>
+			<NumericPredictor name="x7" coefficient="1.0625629551712925"/>
+			<NumericPredictor name="x8" coefficient="-1.1423761379182422"/>
+			<NumericPredictor name="x9" coefficient="0.865164738157564"/>
+			<NumericPredictor name="x10" coefficient="1.79623605246013"/>
+		</RegressionTable>
+		<RegressionTable intercept="9.893622954816722" targetCategory="6">
+			<NumericPredictor name="x1" coefficient="0.27228731586520183"/>
+			<NumericPredictor name="x2" coefficient="1.0359365991150433"/>
+			<NumericPredictor name="x3" coefficient="1.7290920458085404"/>
+			<NumericPredictor name="x4" coefficient="0.29645346169278236"/>
+			<NumericPredictor name="x5" coefficient="0.4763946296403326"/>
+			<NumericPredictor name="x6" coefficient="-2.828158847057345"/>
+			<NumericPredictor name="x7" coefficient="0.27873133919060383"/>
+			<NumericPredictor name="x8" coefficient="2.3604372346818647"/>
+			<NumericPredictor name="x9" coefficient="-0.5711674005950431"/>
+			<NumericPredictor name="x10" coefficient="3.588417500358633"/>
+		</RegressionTable>
+	</RegressionModel>
+</PMML>
