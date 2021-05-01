@@ -31,17 +31,17 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   //SerialBT.begin("ESP32test"); //Bluetooth device name
-  //Serial.println("The device started, now you can pair it with bluetooth!");
-  pinMode(BOT1, INPUT);
-  pinMode(BOT2, INPUT);
-  pinMode(BOT3, INPUT);
-  pinMode(BOT4, INPUT);
-  pinMode(BOT5, INPUT);
-  pinMode(BOT6, INPUT);
-  pinMode(BAC1, INPUT);
-  pinMode(BAC2, INPUT);
-  pinMode(BAC3, INPUT);
-  pinMode(BAC4, INPUT);
+  Serial.println("The device started, now you can pair it with bluetooth!");
+  pinMode(BOT1, INPUT_PULLDOWN);
+  pinMode(BOT2, INPUT_PULLDOWN);
+  pinMode(BOT3, INPUT_PULLDOWN);
+  pinMode(BOT4, INPUT_PULLDOWN);
+  pinMode(BOT5, INPUT_PULLDOWN);
+  pinMode(BOT6, INPUT_PULLDOWN);
+  pinMode(BAC1, INPUT_PULLDOWN);
+  pinMode(BAC2, INPUT_PULLDOWN);
+  pinMode(BAC3, INPUT_PULLDOWN);
+  pinMode(BAC4, INPUT_PULLDOWN);
 }
 
 void loop() {
@@ -70,6 +70,6 @@ void loop() {
     outputBytes[2*i] = output[i];
     outputBytes[2*i + 1] = output[i] >> 8;
   }
-  SerialBT.write(outputBytes, 20);
+  //SerialBT.write(outputBytes, 20);
   delay(10);
 }
