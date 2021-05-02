@@ -56,7 +56,6 @@ def test_clf(clf, seed):
         return clf.score(x_test, y_test)
 
     if isinstance(clf, LogisticRegressionClassifier):
-        mapper = 
         joblib.dump(clf, 'test_clf.pkl')
 
     return clf.score(x_test, y_test)

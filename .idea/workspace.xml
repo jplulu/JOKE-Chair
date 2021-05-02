@@ -20,14 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c30dd7ca-784e-49ae-9241-67072f96dfd3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/db/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/repository/repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classifier/logistic_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/classifier/logistic_regression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classifier/test_classifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/classifier/test_classifiers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
