@@ -7,7 +7,7 @@ NUM_SENSORS = 10
 
 
 def main():
-    ser = serial.Serial('COM11', 115200)
+    ser = serial.Serial('COM3', 9600)
     output = [['Reading 1', 'Reading 2', 'Reading 3', 'Reading 4', 'Reading 5', 'Reading 6', 'Reading 7', 'Reading 8',
                'Reading 9', 'Reading 10']]
     collect(ser, output)
@@ -33,6 +33,7 @@ def calibrate(ser):
 def collect(ser, output):
     baseline = calibrate(ser)
     print(baseline)
+    input("go?")
     while ser.is_open:
         # AUTOCALIBRATE GOES HERE
         if False:
@@ -57,7 +58,7 @@ def collect(ser, output):
     df['Baseline'] = ",".join(baseline.astype(str))
     # for i in range(1, 5):
     # df = df[df['Reading '+ str(i)] > baseline[i-1] + 50]
-    df = df[300:]   
+    df = df[300:]
     df.to_csv('../data/{}.csv'.format(label), index=False)
 
     return df

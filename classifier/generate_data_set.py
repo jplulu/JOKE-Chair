@@ -1,7 +1,7 @@
 import pandas as pd
 import sys
 
-POSTURES = ["proper", "lean_forward", "lean_right", "lean_left", "slouch", "right_leg_cross", "left_leg_cross"]
+POSTURES = ["proper", "lean_forward", "lean_right", "lean_left", "slouch"]
 
 
 def generate_data_set(filename):

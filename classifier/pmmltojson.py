@@ -96,3 +96,5 @@ def pmmlToJson(pmmlFilePath, jsonFilePath):
     with open(jsonFilePath, 'w') as fp:
         json.dump(data_dict, fp)
     print(jsonFilePath + " created")
+
+pmmlToJson("lr.pmml", "lr.json")
